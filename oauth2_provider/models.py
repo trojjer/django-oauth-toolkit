@@ -85,7 +85,7 @@ class AbstractApplication(models.Model):
         if self.redirect_uris:
             return self.redirect_uris.split().pop(0)
 
-        assert False, 'You must provide redirect_uris in your Application model.'
+        assert False, 'You must provide redirect_uris in your Application instance.'
 
     def redirect_uri_allowed(self, uri):
         """
