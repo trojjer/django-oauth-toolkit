@@ -84,9 +84,7 @@ class AbstractApplication(models.Model):
         if self.redirect_uris:
             return self.redirect_uris.split().pop(0)
 
-        assert False, "If you are using implicit, authorization_code" \
-                      "or all-in-one grant_type, you must define " \
-                      "redirect_uris field in your Application model"
+        assert False, 'You must provide redirect_uris in your Application model.'
 
     def redirect_uri_allowed(self, uri):
         """
@@ -112,10 +110,8 @@ class AbstractApplication(models.Model):
 
     def clean(self):
         from django.core.exceptions import ValidationError
-        if not self.redirect_uris \
-            and self.authorization_grant_type \
-            in (AbstractApplication.GRANT_AUTHORIZATION_CODE,
-                AbstractApplication.GRANT_IMPLICIT):
+        if not self.redirect_uris and (self.authorization_grant_type
+                                       in AbstractApplication.GRANTS_WITH_REDIRECT):
             error = _('Redirect_uris could not be empty with {0} grant_type')
             raise ValidationError(error.format(self.authorization_grant_type))
 
